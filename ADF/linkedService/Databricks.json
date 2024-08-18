@@ -1,0 +1,36 @@
+{
+	"name": "Databricks",
+	"properties": {
+		"parameters": {
+			"Databricks_URL": {
+				"type": "string"
+			},
+			"Databricks_Cluster_Id": {
+				"type": "string"
+			},
+			"KV_URL": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureDatabricks",
+		"typeProperties": {
+			"domain": "@linkedService().Databricks_URL",
+			"accessToken": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "KV",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"KV_URL": {
+							"value": "@linkedService().KV_URL",
+							"type": "Expression"
+						}
+					}
+				},
+				"secretName": "Databricks-Token"
+			},
+			"existingClusterId": "@linkedService().Databricks_Cluster_Id"
+		}
+	}
+}

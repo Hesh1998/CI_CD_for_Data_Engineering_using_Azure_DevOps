@@ -1,0 +1,28 @@
+{
+	"name": "DWH",
+	"properties": {
+		"parameters": {
+			"KV_URL": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlDW",
+		"typeProperties": {
+			"connectionString": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "KV",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"KV_URL": {
+							"value": "@linkedService().KV_URL",
+							"type": "Expression"
+						}
+					}
+				},
+				"secretName": "DWH-ConStr"
+			}
+		}
+	}
+}

@@ -1,0 +1,32 @@
+{
+	"name": "DLK",
+	"properties": {
+		"parameters": {
+			"DLK_URL": {
+				"type": "string"
+			},
+			"KV_URL": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureBlobFS",
+		"typeProperties": {
+			"url": "@{linkedService().DLK_URL}",
+			"accountKey": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "KV",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"KV_URL": {
+							"value": "@linkedService().KV_URL",
+							"type": "Expression"
+						}
+					}
+				},
+				"secretName": "DLK-Key"
+			}
+		}
+	}
+}

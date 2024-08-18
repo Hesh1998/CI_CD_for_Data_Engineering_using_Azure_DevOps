@@ -1,0 +1,15 @@
+{
+	"name": "KV",
+	"properties": {
+		"parameters": {
+			"KV_URL": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "@{linkedService().KV_URL}"
+		}
+	}
+}
