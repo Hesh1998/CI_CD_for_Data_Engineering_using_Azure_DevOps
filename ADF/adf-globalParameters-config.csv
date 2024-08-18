@@ -1,0 +1,5 @@
+type,name,path,value
+factory,DEV-SEA-DWH-ADF,globalParameters.Databricks_URL.value,"https://adb-1528821243084521.1.azuredatabricks.net"
+factory,DEV-SEA-DWH-ADF,globalParameters.Databricks_Cluster_Id.value,"0622-083514-fgskikjw"
+factory,DEV-SEA-DWH-ADF,globalParameters.DLK_URL.value,"https://prddlk.dfs.core.windows.net/"
+factory,DEV-SEA-DWH-ADF,globalParameters.KV_URL.value,"https://prd-kv001.vault.azure.net/"
