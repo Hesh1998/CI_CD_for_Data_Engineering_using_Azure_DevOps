@@ -1,0 +1,39 @@
+{
+	"name": "DWH_Generic",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DWH",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"KV_URL": {
+					"value": "@dataset().KV_URL",
+					"type": "Expression"
+				}
+			}
+		},
+		"parameters": {
+			"KV_URL": {
+				"type": "string"
+			},
+			"schema": {
+				"type": "string"
+			},
+			"table": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlDWTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": {
+				"value": "@dataset().schema",
+				"type": "Expression"
+			},
+			"table": {
+				"value": "@dataset().table",
+				"type": "Expression"
+			}
+		}
+	}
+}

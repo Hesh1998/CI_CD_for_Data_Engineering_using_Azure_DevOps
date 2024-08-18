@@ -1,0 +1,23 @@
+{
+	"name": "LogDB",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LogDB",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"KV_URL": {
+					"value": "@dataset().KV_URL",
+					"type": "Expression"
+				}
+			}
+		},
+		"parameters": {
+			"KV_URL": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": []
+	}
+}

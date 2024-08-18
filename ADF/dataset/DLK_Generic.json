@@ -1,0 +1,44 @@
+{
+	"name": "DLK_Generic",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DLK",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"DLK_URL": {
+					"value": "@dataset().DLK_URL",
+					"type": "Expression"
+				},
+				"KV_URL": {
+					"value": "@dataset().KV_URL",
+					"type": "Expression"
+				}
+			}
+		},
+		"parameters": {
+			"DLK_URL": {
+				"type": "string"
+			},
+			"KV_URL": {
+				"type": "string"
+			},
+			"folderpath": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": {
+					"value": "@dataset().folderpath",
+					"type": "Expression"
+				},
+				"fileSystem": "data-lake"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}
