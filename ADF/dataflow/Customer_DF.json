@@ -1,0 +1,83 @@
+{
+	"name": "Customer_DF",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DLK_Generic",
+						"type": "DatasetReference"
+					},
+					"name": "sourceCustomer"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DWH_Generic",
+						"type": "DatasetReference"
+					},
+					"name": "sinkCustomer"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn",
+					"description": "Column Transformations"
+				},
+				{
+					"name": "AlterRow"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          CUSTOMERNAME as string,",
+				"          PHONE as string,",
+				"          ADDRESSLINE1 as string,",
+				"          ADDRESSLINE2 as string,",
+				"          CITY as string,",
+				"          STATE as string,",
+				"          POSTALCODE as string,",
+				"          COUNTRY as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> sourceCustomer",
+				"sourceCustomer derive(CUSTOMERNAME = iif(CUSTOMERNAME == 'nan', toString(null()), CUSTOMERNAME),",
+				"          PHONE = iif(PHONE == 'nan', toString(null()), PHONE),",
+				"          ADDRESSLINE1 = iif(ADDRESSLINE1 == 'nan', toString(null()), ADDRESSLINE1),",
+				"          ADDRESSLINE2 = iif(ADDRESSLINE2 == 'nan', toString(null()), ADDRESSLINE2),",
+				"          CITY = iif(CITY == 'nan', toString(null()), CITY),",
+				"          STATE = iif(STATE == 'nan', toString(null()), STATE),",
+				"          POSTALCODE = iif(POSTALCODE == 'nan', toString(null()), POSTALCODE),",
+				"          COUNTRY = iif(COUNTRY == 'nan', toString(null()), COUNTRY)) ~> derivedColumn",
+				"derivedColumn alterRow(upsertIf(1==1)) ~> AlterRow",
+				"AlterRow sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:true,",
+				"     upsertable:true,",
+				"     keys:['Name'],",
+				"     format: 'table',",
+				"     staged: true,",
+				"     allowCopyCommand: true,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          Name = CUSTOMERNAME,",
+				"          Phone = PHONE,",
+				"          AddressLine1 = ADDRESSLINE1,",
+				"          AddressLine2 = ADDRESSLINE2,",
+				"          City = CITY,",
+				"          State = STATE,",
+				"          PostalCode = POSTALCODE,",
+				"          Country = COUNTRY",
+				"     )) ~> sinkCustomer"
+			]
+		}
+	}
+}
