@@ -1,0 +1,341 @@
+{
+	"name": "Load Customer V 2",
+	"properties": {
+		"activities": [
+			{
+				"name": "SharePoint to DLK",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Set Folder Path",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Repos/nanayakk-im18052@stu.kln.ac.lk/DWH-CICD/Notebooks/Load_Customer_to_DLK",
+					"baseParameters": {
+						"path": {
+							"value": "@variables('folderpath')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "Databricks",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"Databricks_URL": {
+							"value": "@pipeline().globalParameters.Databricks_URL",
+							"type": "Expression"
+						},
+						"Databricks_Cluster_Id": {
+							"value": "@pipeline().globalParameters.Databricks_Cluster_Id",
+							"type": "Expression"
+						},
+						"KV_URL": {
+							"value": "@pipeline().globalParameters.KV_URL",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "Get Folder Path",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderStoredProcedureName": "[log].[LakeLogs_S]",
+						"storedProcedureParameters": {
+							"Key": {
+								"type": "String",
+								"value": "cust_lake_path"
+							}
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "LogDB",
+						"type": "DatasetReference",
+						"parameters": {
+							"KV_URL": {
+								"value": "@pipeline().globalParameters.KV_URL",
+								"type": "Expression"
+							}
+						}
+					}
+				}
+			},
+			{
+				"name": "Set Folder Path",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Get Folder Path",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "folderpath",
+					"value": {
+						"value": "@activity('Get Folder Path').output.firstRow.Value",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Get Table Schema",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "SharePoint to DLK",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderStoredProcedureName": "[log].[LakeLogs_S]",
+						"storedProcedureParameters": {
+							"Key": {
+								"type": "String",
+								"value": "cust_schema"
+							}
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "LogDB",
+						"type": "DatasetReference",
+						"parameters": {
+							"KV_URL": {
+								"value": "@pipeline().globalParameters.KV_URL",
+								"type": "Expression"
+							}
+						}
+					}
+				}
+			},
+			{
+				"name": "Set Table Schema",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Get Table Schema",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "schema",
+					"value": {
+						"value": "@activity('Get Table Schema').output.firstRow.Value",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Get Table Name",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Set Table Schema",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderStoredProcedureName": "[log].[LakeLogs_S]",
+						"storedProcedureParameters": {
+							"Key": {
+								"type": "String",
+								"value": "cust_table"
+							}
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "LogDB",
+						"type": "DatasetReference",
+						"parameters": {
+							"KV_URL": {
+								"value": "@pipeline().globalParameters.KV_URL",
+								"type": "Expression"
+							}
+						}
+					}
+				}
+			},
+			{
+				"name": "Set Table Name",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Get Table Name",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "table",
+					"value": {
+						"value": "@activity('Get Table Name').output.firstRow.Value",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Customer_DF",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "Set Table Name",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "Customer_DF",
+						"type": "DataFlowReference",
+						"datasetParameters": {
+							"sourceCustomer": {
+								"DLK_URL": {
+									"value": "@pipeline().globalParameters.DLK_URL",
+									"type": "Expression"
+								},
+								"KV_URL": {
+									"value": "@pipeline().globalParameters.KV_URL",
+									"type": "Expression"
+								},
+								"folderpath": {
+									"value": "@variables('folderpath')",
+									"type": "Expression"
+								}
+							},
+							"sinkCustomer": {
+								"KV_URL": {
+									"value": "@pipeline().globalParameters.KV_URL",
+									"type": "Expression"
+								},
+								"schema": {
+									"value": "@variables('schema')",
+									"type": "Expression"
+								},
+								"table": {
+									"value": "@variables('table')",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					"staging": {
+						"linkedService": {
+							"referenceName": "DLK",
+							"type": "LinkedServiceReference",
+							"parameters": {
+								"DLK_URL": {
+									"value": "@pipeline().globalParameters.DLK_URL",
+									"type": "Expression"
+								},
+								"KV_URL": {
+									"value": "@pipeline().globalParameters.KV_URL",
+									"type": "Expression"
+								}
+							}
+						},
+						"folderPath": "staging"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"variables": {
+			"folderpath": {
+				"type": "String"
+			},
+			"schema": {
+				"type": "String"
+			},
+			"table": {
+				"type": "String"
+			}
+		},
+		"annotations": []
+	}
+}
