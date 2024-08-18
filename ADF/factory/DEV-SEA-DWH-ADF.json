@@ -1,0 +1,29 @@
+{
+	"name": "DEV-SEA-DWH-ADF",
+	"properties": {
+		"globalParameters": {
+			"Databricks_URL": {
+				"type": "string",
+				"value": "https://adb-820176250274838.18.azuredatabricks.net"
+			},
+			"Databricks_Cluster_Id": {
+				"type": "string",
+				"value": "0622-085228-eno2slwg"
+			},
+			"DLK_URL": {
+				"type": "string",
+				"value": "https://dlkdev.dfs.core.windows.net/"
+			},
+			"KV_URL": {
+				"type": "string",
+				"value": "https://dev-kv001.vault.azure.net/"
+			}
+		}
+	},
+	"location": "southeastasia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "fee53544-c7e5-4834-a7e4-33b302079764",
+		"tenantId": "aa232db2-7a78-4414-a529-33db9124cba7"
+	}
+}
