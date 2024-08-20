@@ -22,7 +22,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": "/Repos/nanayakk-im18052@stu.kln.ac.lk/DWH-CICD/Notebooks/Load_Customer_to_DLK",
+					"notebookPath": "/PySpark Notebooks/Load_Customer_to_DLK",
 					"baseParameters": {
 						"path": {
 							"value": "@variables('folderpath')",
