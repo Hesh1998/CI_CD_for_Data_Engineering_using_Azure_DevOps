@@ -8,4 +8,3 @@ https://drive.google.com/file/d/16JBs0nLoQR18EKvhj_Ufn8Z_FgTYw5EX/view?usp=shari
 
 Resources (GitHub):
 https://github.com/Hesh1998/CI_CD_for_Data_Engineering_using_Azure_DevOps
-![image](https://github.com/user-attachments/assets/70a4ffd2-93ad-45d5-8ce9-32553fe77a71)
